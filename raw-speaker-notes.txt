@@ -1,0 +1,389 @@
+UNFILTERED SPEAKER NOTES BELOW
+
+(one day I’ll be a blog post, but procrastination is no reason not to share what I already have locally)
+
+———— 
+ I’m Emily Ashley.
+
+I’m a software engineer (and sometimes UX Architect) at Boundless Geo
+My team builds open source geospatial software. 
+
+I work on an open-source, open-data historical geography project called MapStory —  everything works great . . . that is, until humans join the scene BUM BUM BUMMMMM
+
+But seriously, part of me still finds it hard to believe that I landed such a dream project.
+
+we’ve engaged a global user community and challenged them to collaboratively organize knowledge about the world both spatially and temporally . . . and found that users’ mental models of maps over time (they’re informal understanding) doesn’t always match with a formal data model
+
+
+Quick background — trust me, it’s relevant context. 
+
+Imma throw a series of buzzwords at ya. You’ll catch up. 
+
+Academic background: urban morphology. — the study of the form of human settlements and the process of their formation and transformation. Cadastral systems. Historic Preservation.
+
+Practical background: guerilla urbanism. / tactical urbanism. volunteering in New Orleans post-katrina. neighborhood groups. corporate responsibility. voluntourism. impact volunteering. BANG FOR BUCK QUALITY OF LIFE. not handprint murals. 
+
+Jams: collaborative volunteer efforts & intersections of online and IRL communities. (there is no “BRB” anymore, IRL IS ONLINE)
+
+Shoutout to Operation Spark. 
+
+This all centers around what drives me….
+
+Core belief: access to readable, explorable local data is a profoundly unmet need in our communities
+
+I’d wager the Walgreens has more information on how my neighborhood is changing than my neighborhood association or city councilwoman does
+
+Hence, the dream project. I’M ALL IN.
+
+Overview of MapStory. Don’t let me go on about this, I could go on and on about this… we can come back to this if there’s specific questions.
+
+“The Atlas of Change that Everyone Can Edit” 
+
+Upload datasets — what we call StoryLayers. Layers. 
+
+Or if you don’t have pre-existing data to upload, you can generate new Layers from scratch.
+
+Collaborate & contribute by editing layers that are shared by the community to make them as complete as possible. 
+
+Curating good data.
+
+Geospatial version control. GeoGit. Errrr GeoGIG — with a G, because the T is not allowed. (so we also have data about how our data about change is changing) 
+
+Cherry on top, lagniappe of this platform is the StoryTelling / Narrative Elements. Compose “mapstories” by combining layers with text, images, and video for human context. 
+
+So, no big deal. We’re just trying ot build an atlas thru an online platform that can collaboratively capture and display human knowledge of all change over time. 
+
+NO BIG DEAL.
+
+Dream Big. 
+
+As with most big dreams, it’s been broken and made new again a few times over over the years.
+
+but some of our favorite most dear things are broken things, aren’t they?
+
+Broken dream project. 
+
+We’ll get there. We have a great team. I love it. 
+
+Ok so I promised you 7 Falsehoods. 
+
+Let’s dig in. 
+
+To get a feel:
+
+How many of you have tried to collect data? Input?
+How many of you have worked with volunteered or crowd-sourced data?
+
+
+How many of you have worked with spatial data?
+How many of you have worked with temporal data?
+
+How many of you have worked with spatio-temporal data?
+
+How many of you have worked on an application that provides cartography and styling tools? For visualizing or animating change over time?  If you’re out there, you’re my new best friend.
+
+Cool.
+
+I work at a geospatial company in a geospatial community so apologies if this talk is more time centered than place centered. I tend to take knowledge about working with place for granted.
+
+We’ll focus on time, but I’m gonna simplify a few things for us.
+
+What we’re not digging into:
+	- timezones / daylight savings
+	- leap seconds / days / years
+	- anything smaller than a secong
+	- non-gregorian calendars
+	- relativity
+We’ve got 45 minutes. Time is HARD enough without those.
+
+What I am talking about:
+	- problems we’re trying to solve
+	- problems that have surprised me
+	- questions I don’t know how to answer 
+		- (that’s why I’m here, lets work together)
+	- working with volunteered information from technical and non-technically oriented folks
+
+So arguably there are 4 steps to spatio-temporal data platforms
+
+	- collection
+	- storage
+	- requests
+	- visualization 
+
+Where to start?
+
+Easy pickings. How about a warm up?
+
+Falsehood #0: Nothing worth computing happened before Jan 1 1970.
+
+I jest. I tease. There’s a lot of time, and I see date epochs as an attempt to take a reasonable size bite of the problem. 
+
+However, there are side effects from the placements of these bites. 
+
+Evidence suggests that these are assumptions software made at it’s roots on how to go about modeling time.
+
+
+A month ago I asked a team mate to break down the ‘conceptual data model’ of MapStory for me.
+
+I wanted to make sure we got this. Wanted to make sure we were on the same page using the same language making similar assumptions. 
+
+[screenshot] 
+
+Simple right?
+ Time.
+
+Elephant Assumption in the room.
+
+#1 - Time. The tools you work with should take care of that.
+
+So we’re getting suers to map the things they know. To share. To contribute. COLLABORATE. curate good data.
+
+(every cartography problem is a data problem and clean data is a myth I tell you)
+
+so we’ve got some pretty sweet tools and standards to help us
+
+- postgress / postGIS
+- iso 8601
+- time support via wfs-t(ransaction) in goeserver
+- osgeo importer in geonode
+
+so yes, tools CAN handle time
+But we must be intentional:
+
+-  in how we use them. 
+- what we’re giving them
+- and what we’re expecting back
+
+#2 To add time to our geographic data, we just add a time field or column.
+
+Importer will parse it. 
+Postgress can save/index it.
+And geoserver will send us the bits that match our query.
+
+FALSE.
+
+Scene:
+
+imagine we’re in Arlen, Texas. 
+
+2 bits of user knowledge:
+
+User A knows the post office opened at this location in 1932
+User B knows the town of Arlen Texas was founded on this site Dec 12, 1932.
+
+Date parser goes oh I can read that.
+
+January 1st, midnight 1932
+December 12th midnight, 1932
+
+Timeline and Map will show the post office opened nearly 12 months before the town was founded.
+
+We have now just 
+	- fabricated precision
+	- compromised our primary-source data
+	- and made our map and timeline “lie”
+
+Wait how did we make it lie?
+
+On the visualization note.
+
+((( pull up rocket launch or roller coaster layer or something))
+
+Two main ways to represent time.
+
+Time as a line. 
+Time as time. (playback)
+
+(sidenote: make a mental pin on how to use these tools to interact/explore time)
+
+Representing time linearly (timeline)
+so where should we draw the post office opening on the timeline? 
+
+Representing time as time (animation) 
+When should it appear on the map. How long should it be there? When should it be off the map? 
+
+Collection and storage and visualization have different needs.
+
+BE INTENTIONAL.
+
+
+Aside 2..5. Timelines move from left to right.
+
+Right to left. Forward and back. East to west. Cyclical. 
+
+Timelines are not universally visualized.
+
+Universal.
+
+Ok, how many of you know your birthdays??
+General time of day (morning, evening,) ((Not iso 8601))
+Hour?
+
+#3# Time is precise. Or, more specifically, once collected, your time-enabled data will have a uniform level of precision 
+
+	— (regardless of how it needs to be stored, we already established collection and storage and visualization have different needs.)
+
+So, say I wanted to make a map and time slider of all of your birthdays, honoring the level of known and communicated precision.
+ 
+Can our data model / storage / tools allow me to retrieve your births and place them in a reasonably accurate order?
+ 
+Vis:
+As time- At what rate do I move the time slider forward? Are some on the map longer? 
+As line- What is the granularity? Do some take up more space than others? 
+
+
+CHRONON. the length of time it takes one quantum of energy to push one electron from one electronic orbit to the next.
+
+On our project I’ve been using it as the “smallest measure of granularity for a given dataset (or compiled data sets)”
+
+Back to something we know. 
+
+How many of you knew your birthday?
+
+Hour?
+
+Minute?
+
+(astrology fans?)
+
+Serious question: How many births do you think happen in less than 1 minute. 
+
+#4 Time / events are instantaneous
+
+Or rather, time is always a points-based domain. 
+
+Beginnings and endings are often processes, not instantaneous events.
+
+Rome wasn’t built in a day. 
+But I bet you there’s a data set that stores it that way. 
+
+However, we all _kinda_ know that in order to model data it requires that we compromise reality to store information. 
+
+We compromise reality to store information.
+
+So when a particular data system has a “data architect” they can make what others might see as arbitrary human decisions to best suit their use of the data because the perception was useful or because it corresponded to the kinds of information they were interested in maintaining in the system.
+
+The weird, fun thing about MapStory is we’ve got a LOT of systems. A lot of layers.
+
+When there’s no doctor to declare Time of Death, how do you know at what part of life the dying part began and ended. 
+
+Mix & matching concepts: Query joining concepts of granularity & interval-based events?
+
+
+
+DOMAINS.
+
+Point-based. (takes up no space)
+
+Interval-based. (takes up some space) 
+
+We do this in spatial data too.
+Point.
+Line.
+Polygon.
+
+Processes: instantaneous / interval 
+Start date. End date.
+Start start date - end start date. 
+
+
+Interval in point based
+Instant in interval-based domain
+Instant in point-based domain
+
+Mix & matching concepts
+
+STOP BEFORE NEXT SLIDE
+
+Here’s a thing for ya.
+ 
+I want to say the EVENT was from 1919 – 1932.
+ 
+ So here we have the precision/granularity, or the chronon, being a year.
+With this granularity, we also know it was an interval-based event with a span of blah blah blah.
+ 
+So to send this in, when it gets combined, I’d expect human knowledge to be something like this. Fairly good mapping. 
+
+I’m pleased with this outcome. It’s important think about what input fields ya put, and how you parse dates.
+
+Pro-tip, docs say the tools can handle these storage/requests. No excuses!
+
+note on interval: Dangerous probably necissary NOTION/assumption: entities have a finite existence, a beginning and an end.
+We can’t change that. But that doesn’t mean we shouldn’t acknowledge that as a compromise we are making.
+
+
+#5 Time on a continuous scale, right?
+
+Scales being ordinal, discrete, continuous.
+
+Continuous -  theoretically be measured in infinitely small units.
+Discrete -  only take certain numerical values
+
+I imagine that when programmers model time they most often model it as a discrete scale. Tiny chronon.
+When you think about time, as a human tho, you can bounce easily between those scales based on your experience or relevance of being specific.
+ 
+So part of this effort with mapstory, and arguably the inspiration of this talk, is how do we model data in a way that maps to human knowledge. Right. Humans join the scene. Shit breaks.
+ 
+ 
+Collaborative , engagement, retention
+Volunteer in the smallest way possible
+Contribute what you know
+Find your niche
+Minimize the buy in
+ 
+So when it comes to contributing spatio-temporal data
+Imma throw this at you and let it sit.
+ 
+        	Ordinal.
+ 
+Sometimes, often, human knowledge of events is known and related on an ordinal scale
+ 
+The post office was built AFTER the town was founded.
+My twin was born before me (I don’t have a twin)
+ 
+If somebody has that knowledge, can we capture it and use it to build out other folks’s knowledge? Can we contribute that to our bank, our atlas, of knowledge (collect, store, req, vis)
+ 
+#6# not a falsehood, but worth a #
+ 
+organizing information: part of the job is determining what makes an instance unique within each entity type.
+ 
+Historic preservation: temple rebuilt every 20 years with materials from same forest
+ 
+There’s a bar in my neighborhood that seems to change ownership (and names, every 2 years) Whirling Dirvish, Crystal, 1135, Santos,
+Often, with the same weekly events. Same DJ’s
+How long has that bar been there?
+ 
+Can it be closed for a day, for a month, for a couple years. What makes it continually open IF THAT EVEN MATTERS.
+ 
+So we have this way to upload existing datasets and perfect them.
+But one of the things I find most interesting and most challenging is the notion of collaborating to CREATE new data thru this platform
+ 
+Not to play favorites, but initiatives, I find relatable, is the history of beer.
+ 
+And part of curating this data with the community around it, is making these arbritary “data architect” decisions. AS USERS. And data stewards.
+ 
+Change owners, change location, change staff, close for 20 years. Change logo. Recipe. Name. Change is often NOT an instantaneous event. YOU HAVE to make arbitary or deliberate decisions in recording time and deciding what makes an instance unique within each entity type
+ 
+As programmers, we can’t make these decisions for each data set. Our Challenge is to provide mechanisms and freedom for each data-set’s community and stewards to decide and communicate (or disagree and fork it). And make good data.
+ 
+ 
+ 
+#7# We already know what we’re doing, we figured time out years ago. That’s why we have standards.
+        	(ties into #0, but this time I’m not kidding)
+ 
+This is something we struggle with as programmers and the ramifications and effects of this and how this was set up is something we’re still solving.
+ 
+Think about it. The less-modern your data, often, the less-precise it will be.
+ 
+[illustration of levels of granularity]
+Built human environ, human history, carbon dating
+-       nanoseconds hours timezones time of day clock seasons calendar eras
+-       +- 10 years, 100 years, 1000 years, 10000 years ya feel me?
+-       We care a lot about the falsehoods around “leap seconds” in modern data.  Data made by computers. They can mess you up. When you’re building a historical geography platform, it’s a different set of problems and you have to think critically about how we handle time.
+-        
+There’s a significant disconnect between the data model and user knowledge  We’re still figuring it out. Let’s talk about it.
+
+—— P.S. ——
+
+SO what does this mean? what have i done with this? 
+Show changing requirements g-doc. 
